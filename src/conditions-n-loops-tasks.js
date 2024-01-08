@@ -406,21 +406,22 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
-}
-/** мое решение
- * const newArr = [];
-  let simpleArr = [];
-  for (let i = 0; i <= matrix.length - 1; i += 1) {
-    for (let j = matrix.length - 1; j >= 0; j -= 1) {
-      simpleArr.push(matrix[j][i]);
-    }
-    newArr.push(simpleArr);
-    simpleArr = [];
+function rotateMatrix(matrix) {
+  const startMatrix = [];
+  for (let i = 0; i < matrix.length; i += 1) {
+    startMatrix[startMatrix.length] = [...matrix[i]];
   }
-  return newArr;
-  */
+  const newMatrix = matrix;
+
+  for (let i = 0; i < matrix.length; i += 1) {
+    let z = 0;
+    for (let j = matrix.length - 1; j >= 0; j -= 1) {
+      newMatrix[i][z] = startMatrix[j][i];
+      z += 1;
+    }
+  }
+}
+
 /**
  * Sorts an array of numbers in ascending order in place.
  * Employ any sorting algorithm of your choice.
@@ -436,22 +437,25 @@ function rotateMatrix(/* matrix */) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
-  const newArr = [arr[0]];
+  if (arr.length === 1 || arr.length === 0) {
+    return arr;
+  }
+  const newArr = arr;
+  const middle = newArr[0];
+  let smallValue = [];
+  let bigValue = [];
   for (let i = 1; i < arr.length; i += 1) {
-    for (let j = 0; j < newArr.length; j += 1) {
-      if (
-        newArr[j] < arr[i] &&
-        (j === newArr.length - 1 || newArr[j + 1] > arr[i])
-      ) {
-        newArr.splice(j + 1, 0, arr[i]);
-        j = newArr.length;
-      } else if (newArr[j] < arr[i]) {
-        j += 1;
-      } else {
-        newArr.splice(j, 0, arr[i]);
-        j = newArr.length;
-      }
+    if (arr[i] < middle) {
+      smallValue[smallValue.length] = arr[i];
+    } else {
+      bigValue[bigValue.length] = arr[i];
     }
+  }
+  smallValue = sortByAsc(smallValue);
+  bigValue = sortByAsc(bigValue);
+  const res = [...smallValue, middle, ...bigValue];
+  for (let i = 0; i < res.length; i += 1) {
+    newArr[i] = res[i];
   }
   return newArr;
 }
